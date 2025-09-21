@@ -213,11 +213,23 @@ def show_mentor_chat():
 
     user_input = st.chat_input("Ask your career question here...")
     if user_input:
-       def show_mentor_chat():
+      def parse_special_commands(user_input):
+    """Parse special commands from user input and update context if needed."""
+    low_text = user_input.lower()
+    if "timeline:" in low_text:
+        timeline = user_input.split("timeline:")[-1].strip()
+        st.session_state.context["timeline"] = timeline
+        return f"Timeline recorded: {timeline}."
+    elif "prep level:" in low_text:
+        prep = user_input.split("prep level:")[-1].strip()
+        st.session_state.context["prep_level"] = prep
+        return f"Preparation level recorded: {prep}."
+    return None
+
+def show_mentor_chat():
     st.header("AI Mentor Chatbot")
-    # Ensure chat_history is always a list
-    if "chat_history" not in st.session_state or not isinstance(st.session_state.chat_history, list):
-        st.session_state.chat_history = []
+    # chat_history initialization should be at app startup, not here
+
     for msg in st.session_state.chat_history:
         with st.chat_message(msg['role']):
             st.markdown(msg['content'])
@@ -225,19 +237,14 @@ def show_mentor_chat():
     user_input = st.chat_input("Ask your career question here...")
     if user_input:
         st.session_state.chat_history.append({"role": "user", "content": user_input})
-        # ... rest of your code ...
 
-        low_text = user_input.lower()
-        if "timeline:" in low_text:
-            timeline = user_input.split("timeline:")[-1].strip()
-            st.session_state.context["timeline"] = timeline
-            response = f"Timeline recorded: {timeline}."
-        elif "prep level:" in low_text:
-            prep = user_input.split("prep level:")[-1].strip()
-            st.session_state.context["prep_level"] = prep
-            response = f"Preparation level recorded: {prep}."
-        else:
-            response = get_ai_mentor_response(user_input)
+        # Parse for special commands
+        response = parse_special_commands(user_input)
+        if response is None:
+            try:
+                response = get_ai_mentor_response(user_input)
+            except Exception as e:
+                response = f"Sorry, there was an error: {e}"
 
         st.session_state.chat_history.append({"role": "assistant", "content": response})
 
