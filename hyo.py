@@ -1,9 +1,9 @@
+# Place all imports at the top
 import streamlit as st
 import pandas as pd
 import requests
 from openai import OpenAI
 import os
-
 import toml
 import openai
 
