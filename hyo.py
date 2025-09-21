@@ -42,7 +42,7 @@ if "personal_skills" not in st.session_state:
     st.session_state.personal_skills = {}
 
 if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+    st.session_state.chat_history = {}
 
 if "context" not in st.session_state:
     st.session_state.context = {}
