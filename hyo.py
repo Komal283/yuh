@@ -14,32 +14,17 @@ openai.api_key = config["OPENAI_API_KEY"]
 
 # Centralize model configuration
 MODEL_NAME = "gpt-4o-mini"
-
-# Make sure to use the same client instance across your code
-api_key = config.get("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
-
-try:
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=[{"role": "user", "content": "Hello!"}]
-    )
-    print(response.choices[0].message.content)
-except Exception as e:
-    print(f"OpenAI API call failed: {e}")
-# Initialize OpenAI client
-client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
-from openai import OpenAI
 import streamlit as st
-import os
+from openai import OpenAI
 
-api_key = st.secrets.get("OPENAI_API_KEY") 
+# Centralized OpenAI client initialization for Streamlit
+api_key = st.secrets.get("OPENAI_API_KEY")
 
 if not api_key:
     st.error("OpenAI API key is missing! Please set OPENAI_API_KEY in Streamlit secrets")
+    st.stop()  # Stop the app if key is missing
 
 client = OpenAI(api_key=api_key)
-
 
 # Initialize session state variables
 if "user_profile" not in st.session_state:
