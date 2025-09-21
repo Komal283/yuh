@@ -26,19 +26,37 @@ if not api_key:
     st.stop()
 
 openai.api_key = api_key
+# Centralized model config
+MODEL_NAME = "gpt-4o"  # Keep consistent with actual usage
 
-# Centralize model configuration
-MODEL_NAME = "gpt-4o-mini"
-import streamlit as st
-from openai import OpenAI
+def get_openai_client():
+    api_key = get_openai_api_key()
+    if not api_key:
+        st.error("OpenAI API key is missing! Please set it in Streamlit secrets or secrets.toml")
+        st.stop()
+    return OpenAI(api_key=api_key)
 
-# Centralized OpenAI client initialization for Streamlit
-api_key = st.secrets.get("OPENAI_API_KEY")
-if not api_key:
-    st.error("OpenAI API key is missing! Please set OPENAI_API_KEY in Streamlit secrets")
-    st.stop()  # Stop the app if key is missing
+# ... rest of your code ...
 
-client = OpenAI(api_key=api_key)
+def get_ai_mentor_response(user_input):
+    profile = st.session_state.user_profile or {}
+    context = st.session_state.context or {}
+
+    prompt_messages = [
+        {"role": "system", "content": "You are a helpful career mentor AI assistant."},
+        {"role": "user", "content": f"User Profile: {profile}, Context: {context}, Question: {user_input}"}
+    ]
+
+    client = get_openai_client()  # Ensures centralized, robust client initialization
+
+    response = client.chat.completions.create(
+        model=MODEL_NAME,  # Use centralized config
+        messages=prompt_messages,
+        max_tokens=400,
+        temperature=0.7,
+    )
+
+    return response.choices[0].message.content
 
 # Initialize session state variables
 if "user_profile" not in st.session_state:
