@@ -4,6 +4,22 @@ import requests
 from openai import OpenAI
 import os
 
+import toml
+import openai
+
+# Load keys from secret.toml
+config = toml.load("secrets.toml")
+
+openai.api_key = config["OPENAI_API_KEY"]
+
+# Test
+response = openai.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+print(response.choices[0].message.content)
+
 # Initialize OpenAI client
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 from openai import OpenAI
