@@ -9,11 +9,7 @@ import openai
 
 # Load keys from secret.toml
 config = toml.load("secrets.toml")
-
 openai.api_key = config["OPENAI_API_KEY"]
-
-import os
-
 api_key = st.secrets.get("OPENAI_API_KEY")
 if not api_key and os.path.exists("secrets.toml"):
     import toml
@@ -30,7 +26,6 @@ from openai import OpenAI
 
 # Centralized OpenAI client initialization for Streamlit
 api_key = st.secrets.get("OPENAI_API_KEY")
-
 if not api_key:
     st.error("OpenAI API key is missing! Please set OPENAI_API_KEY in Streamlit secrets")
     st.stop()  # Stop the app if key is missing
