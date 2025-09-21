@@ -213,17 +213,27 @@ def show_mentor_chat():
 
     user_input = st.chat_input("Ask your career question here...")
     if user_input:
-      def parse_special_commands(user_input):
-    """Parse special commands from user input and update context if needed."""
-    low_text = user_input.lower()
-    if "timeline:" in low_text:
-        timeline = user_input.split("timeline:")[-1].strip()
-        st.session_state.context["timeline"] = timeline
-        return f"Timeline recorded: {timeline}."
-    elif "prep level:" in low_text:
-        prep = user_input.split("prep level:")[-1].strip()
-        st.session_state.context["prep_level"] = prep
-        return f"Preparation level recorded: {prep}."
+     import re
+
+def parse_special_commands(user_input):
+    """
+    Parse special commands from user input and update context if needed.
+    Supported commands:
+      - timeline: <value>
+      - prep level: <value>
+    """
+    command_patterns = {
+        "timeline": r"timeline:\s*(.*)",
+        "prep_level": r"prep level:\s*(.*)"
+    }
+    for key, pattern in command_patterns.items():
+        match = re.search(pattern, user_input, flags=re.IGNORECASE)
+        if match:
+            value = match.group(1).strip()
+            if not value:
+                return f"{key.replace('_', ' ').capitalize()} value missing. Please provide a value."
+            st.session_state.context[key] = value
+            return f"{key.replace('_', ' ').capitalize()} recorded: {value}."
     return None
 
 def show_mentor_chat():
