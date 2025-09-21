@@ -1,0 +1,17 @@
+# Data handling
+pandas
+numpy
+
+# Machine Learning
+scikit-learn
+joblib
+
+# Visualization
+matplotlib
+seaborn
+altair
+pydeck
+
+# Web app
+streamlit
+requests
