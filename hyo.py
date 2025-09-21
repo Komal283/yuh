@@ -6,6 +6,17 @@ import os
 
 # Initialize OpenAI client
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY"))
+from openai import OpenAI
+import streamlit as st
+import os
+
+api_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    st.error("OpenAI API key is missing! Please set OPENAI_API_KEY in Streamlit secrets or env variables.")
+
+client = OpenAI(api_key=api_key)
+
 
 # Initialize session state variables
 if "user_profile" not in st.session_state:
