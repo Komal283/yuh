@@ -12,6 +12,17 @@ config = toml.load("secrets.toml")
 
 openai.api_key = config["OPENAI_API_KEY"]
 
+import os
+
+api_key = st.secrets.get("OPENAI_API_KEY")
+if not api_key and os.path.exists("secrets.toml"):
+    import toml
+    config = toml.load("secrets.toml")
+    api_key = config.get("OPENAI_API_KEY")
+if not api_key:
+    st.error("OpenAI API key is missing! Please set it in Streamlit secrets or secrets.toml")
+    st.stop()
+
 # Centralize model configuration
 MODEL_NAME = "gpt-4o-mini"
 import streamlit as st
