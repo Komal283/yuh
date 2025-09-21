@@ -43,7 +43,7 @@ client = OpenAI(api_key=api_key)
 
 # Initialize session state variables
 if "user_profile" not in st.session_state:
-    st.session_state.user_profile = None
+    st.session_state.user_profile = {}
 
 if "personal_skills" not in st.session_state:
     st.session_state.personal_skills = {}
