@@ -12,14 +12,21 @@ config = toml.load("secrets.toml")
 
 openai.api_key = config["OPENAI_API_KEY"]
 
-# Test
-response = openai.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[{"role": "user", "content": "Hello!"}]
-)
+# Centralize model configuration
+MODEL_NAME = "gpt-4o-mini"
 
-print(response.choices[0].message.content)
+# Make sure to use the same client instance across your code
+api_key = config.get("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
 
+try:
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[{"role": "user", "content": "Hello!"}]
+    )
+    print(response.choices[0].message.content)
+except Exception as e:
+    print(f"OpenAI API call failed: {e}")
 # Initialize OpenAI client
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 from openai import OpenAI
