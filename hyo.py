@@ -245,15 +245,16 @@ st.set_page_config(page_title="AI-Powered Career Advisor", layout="wide")
 if st.session_state.user_profile is None:
     user_profile_form()
 else:
-    menu = ["Dashboard", "Skills & Courses", "Mentorship Chatbot", "Industry News"]
-    choice = st.sidebar.selectbox(f"Hello, {st.session_state.user_profile['name']}! Navigate:", menu)
+    # Safely get the user name, fallback to "User" if not set
+user_name = st.session_state.user_profile.get('name', 'User')
+choice = st.sidebar.selectbox(f"Hello, {user_name}! Navigate:", menu)
 
-    page_funcs = {
-        "Dashboard": show_dashboard,
-        "Skills & Courses": show_skills_courses,
-        "Mentorship Chatbot": show_mentor_chat,
-        "Industry News": show_industry_news
-    }
+page_funcs = {
+    "Dashboard": show_dashboard,
+    "Skills & Courses": show_skills_courses,
+    "Mentorship Chatbot": show_mentor_chat,
+    "Industry News": show_industry_news
+}
 
-    page_funcs[choice]()
+page_funcs[choice]()
 
