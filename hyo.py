@@ -242,10 +242,13 @@ def show_industry_news():
 
 st.set_page_config(page_title="AI-Powered Career Advisor", layout="wide")
 
-if st.session_state.user_profile is None:
+menu = ["Dashboard", "Skills & Courses", "Mentorship Chatbot", "Industry News"]  # Example menu list
+
+if not st.session_state.get("user_profile"):
     user_profile_form()
-else:
-    # Safely get the user name, fallback to "User" if not set
+    st.stop()  # Prevent further execution until profile is set
+
+# Safely get the user name, fallback to "User" if not set
 user_name = st.session_state.user_profile.get('name', 'User')
 choice = st.sidebar.selectbox(f"Hello, {user_name}! Navigate:", menu)
 
@@ -257,4 +260,3 @@ page_funcs = {
 }
 
 page_funcs[choice]()
-
